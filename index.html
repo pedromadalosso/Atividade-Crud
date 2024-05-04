@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Livros</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <style>body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+    
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+    
+    form {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+    
+    form label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    
+    form input[type="text"],
+    form input[type="hidden"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+    
+    form button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    li {
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background-color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    li button {
+        padding: 8px 12px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    
+    li button.edit {
+        background-color: #ffc107;
+    }
+    
+    li button.edit:hover {
+        background-color: #ffca2c;
+    }
+    
+    li button.remove {
+        margin-left: 10px;
+    }
+    
+    li button.remove:hover {
+        background-color: #e74c3c;
+    }
+
+    #alertaLivroExistente {
+        display: none;
+        color: red;
+        margin-bottom: 15px;
+    }
+    </style>
+    <h1>CRUD de Biblioteca</h1>
+
+    <form id="livroForm">
+        <input type="hidden" id="id" name="id">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required>
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor" name="autor" required>
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required>
+        <button type="submit">Salvar</button>
+    </form>
+
+    <div id="alertaLivroExistente">Livro já cadastrado</div>
+
+    <ul id="livrosList"></ul>
+
+    <script>
+        function carregarLivros() {
+            fetch('http://localhost:3000/livros')
+            .then(response => response.json())
+            .then(data => {
+                const livrosList = document.getElementById('livrosList');
+                livrosList.innerHTML = '';
+                data.forEach(livro => {
+                    const li = document.createElement('li');
+                    li.textContent = `${livro.titulo} - ${livro.autor} - ${livro.isbn}`;
+                    const btnEditar = document.createElement('button');
+                    btnEditar.textContent = 'Editar';
+                    btnEditar.addEventListener('click', () => {
+                        document.getElementById('id').value = livro.id;
+                        document.getElementById('titulo').value = livro.titulo;
+                        document.getElementById('autor').value = livro.autor;
+                        document.getElementById('isbn').value = livro.isbn;
+                    });
+                    const btnRemover = document.createElement('button');
+                    btnRemover.textContent = 'Remover';
+                    btnRemover.addEventListener('click', () => {
+                        removerLivro(livro.id);
+                    });
+                    li.appendChild(btnEditar);
+                    li.appendChild(btnRemover);
+                    livrosList.appendChild(li);
+                });
+            });
+        }
+
+        function salvarLivro(id) {
+            const titulo = document.getElementById('titulo').value;
+            const autor = document.getElementById('autor').value;
+            const isbn = document.getElementById('isbn').value;
+
+            fetch('http://localhost:3000/livros' + (id ? `/${id}` : ''), {
+                method: id ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ titulo, autor, isbn })
+            })
+            .then(response => {
+                if (response.ok) {
+                    carregarLivros();
+                    document.getElementById('livroForm').reset();
+                } else if (response.status === 400) {
+                    document.getElementById('alertaLivroExistente').style.display = 'block';
+                } else {
+                    throw new Error('Erro ao adicionar/atualizar livro');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar requisição:', error.message);
+                // Exibir mensagem de erro para o usuário, se necessário
+            });
+        }
+
+        function removerLivro(id) {
+            fetch('http://localhost:3000/livros/' + id, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    carregarLivros();
+                } else {
+                    throw new Error('Erro ao remover livro');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar requisição:', error.message);
+                // Exibir mensagem de erro para o usuário, se necessário
+            });
+        }
+
+        document.getElementById('livroForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const id = document.getElementById('id').value;
+            salvarLivro(id);
+        });
+
+        carregarLivros();
+    </script>
+</body>
+</html>
