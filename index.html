@@ -21,12 +21,25 @@
         padding: 20px;
     }
     
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
+    @keyframes moveText {
+        0% {
+            transform: translateX(0);
+        }
+        50% {
+            transform: translateX(20px);
+        }
+        100% {
+            transform: translateX(0);
+        }
     }
-    
+
+    .animated-text {
+        display: inline-block;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        animation: moveText 2s ease infinite;
+    }
     form {
         padding: 20px;
         border: 1px solid #ccc;
@@ -56,10 +69,13 @@
         background-color: #007bff;
         color: white;
         border: none;
-        border-radius: 3px;
+        border-radius: 15px;
         cursor: pointer;
+        transition: background-color 0.3s;
     }
-    
+    .form-button:hover {
+        background-color: #0056b3;
+    }
     ul {
         list-style-type: none;
         padding: 0;
@@ -81,7 +97,7 @@
         background-color: #dc3545;
         color: white;
         border: none;
-        border-radius: 3px;
+        border-radius: 15px;
         cursor: pointer;
     }
     
@@ -107,7 +123,9 @@
         margin-bottom: 15px;
     }
     </style>
-    <h1>CRUD de Biblioteca</h1>
+     <div class="animated-text">
+        CRUD Biblioteca
+    </div>
 
     <form id="livroForm">
         <input type="hidden" id="id" name="id">
@@ -117,7 +135,7 @@
         <input type="text" id="autor" name="autor" required>
         <label for="isbn">ISBN:</label>
         <input type="text" id="isbn" name="isbn" required>
-        <button type="submit">Salvar</button>
+        <button class="form-button">Enviar</button>
     </form>
 
     <div id="alertaLivroExistente">Livro já cadastrado</div>
