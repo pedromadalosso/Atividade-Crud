@@ -8,122 +8,125 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <style>body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f0f0f0;
-    }
-    
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    @keyframes moveText {
-        0% {
-            transform: translateX(0);
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
         }
-        50% {
-            transform: translateX(20px);
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        100% {
-            transform: translateX(0);
+        
+        @keyframes moveText {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(20px);
+            }
+            100% {
+                transform: translateX(0);
+            }
         }
-    }
 
-    .animated-text {
-        display: inline-block;
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-        animation: moveText 2s ease infinite;
-    }
-    form {
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #fff;
-    }
-    
-    form label {
-        display: block;
-        margin-bottom: 10px;
-        font-weight: bold;
-    }
-    
-    form input[type="text"],
-    form input[type="hidden"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-    }
-    
-    form button {
-        width: 100%;
-        padding: 12px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 15px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    .form-button:hover {
-        background-color: #0056b3;
-    }
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    
-    li {
-        padding: 15px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        background-color: #fff;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    li button {
-        padding: 8px 12px;
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 15px;
-        cursor: pointer;
-    }
-    
-    li button.edit {
-        background-color: #ffc107;
-    }
-    
-    li button.edit:hover {
-        background-color: #ffca2c;
-    }
-    
-    li button.remove {
-        margin-left: 10px;
-    }
-    
-    li button.remove:hover {
-        background-color: #e74c3c;
-    }
+        .animated-text {
+            display: inline-block;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            animation: moveText 2s ease infinite;
+        }
+        form {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        form input[type="text"],
+        form input[type="hidden"],
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        
+        form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .form-button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        li {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        li button {
+            padding: 8px 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        
+        li button.edit {
+            background-color: #ffc107;
+        }
+        
+        li button.edit:hover {
+            background-color: #ffca2c;
+        }
+        
+        li button.remove {
+            margin-left: 10px;
+        }
+        
+        li button.remove:hover {
+            background-color: #e74c3c;
+        }
 
-    #alertaLivroExistente {
-        display: none;
-        color: red;
-        margin-bottom: 15px;
-    }
+        #alertaLivroExistente {
+            display: none;
+            color: red;
+            margin-bottom: 15px;
+        }
     </style>
-     <div class="animated-text">
+    
+    <div class="animated-text">
         CRUD Biblioteca
     </div>
 
@@ -132,7 +135,9 @@
         <label for="titulo">Título:</label>
         <input type="text" id="titulo" name="titulo" required>
         <label for="autor">Autor:</label>
-        <input type="text" id="autor" name="autor" required>
+        <select id="autor" name="autor" required>
+            <option value="">Selecione um autor</option>
+        </select>
         <label for="isbn">ISBN:</label>
         <input type="text" id="isbn" name="isbn" required>
         <button class="form-button">Enviar</button>
@@ -143,40 +148,60 @@
     <ul id="livrosList"></ul>
 
     <script>
-        function carregarLivros() {
-            fetch('http://localhost:3000/livros')
-            .then(response => response.json())
-            .then(data => {
-                const livrosList = document.getElementById('livrosList');
-                livrosList.innerHTML = '';
-                data.forEach(livro => {
-                    const li = document.createElement('li');
-                    li.textContent = `${livro.titulo} - ${livro.autor} - ${livro.isbn}`;
-                    const btnEditar = document.createElement('button');
-                    btnEditar.textContent = 'Editar';
-                    btnEditar.addEventListener('click', () => {
-                        document.getElementById('id').value = livro.id;
-                        document.getElementById('titulo').value = livro.titulo;
-                        document.getElementById('autor').value = livro.autor;
-                        document.getElementById('isbn').value = livro.isbn;
-                    });
-                    const btnRemover = document.createElement('button');
-                    btnRemover.textContent = 'Remover';
-                    btnRemover.addEventListener('click', () => {
-                        removerLivro(livro.id);
-                    });
-                    li.appendChild(btnEditar);
-                    li.appendChild(btnRemover);
-                    livrosList.appendChild(li);
-                });
+      function carregarAutores() {
+    fetch('http://localhost:3000/autores')
+        .then(response => response.json())
+        .then(data => {
+            const selectAutor = document.getElementById('autor');
+            selectAutor.innerHTML = '<option value="">Selecione um autor</option>';
+            data.forEach(autor => {
+                const option = document.createElement('option');
+                option.value = autor.id;
+                option.textContent = autor.nome;
+                selectAutor.appendChild(option);
             });
-        }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar autores:', error.message);
+            // Exibir mensagem de erro para o usuário, se necessário
+        });
+}
 
+
+function carregarLivros() {
+    fetch('http://localhost:3000/livros')
+        .then(response => response.json())
+        .then(data => {
+            const livrosList = document.getElementById('livrosList');
+            livrosList.innerHTML = '';
+            data.forEach(livro => {
+                const li = document.createElement('li');
+                li.textContent = `${livro.titulo} - ${livro.autor} - ${livro.isbn}`;
+                const btnEditar = document.createElement('button');
+                btnEditar.textContent = 'Editar';
+                btnEditar.addEventListener('click', () => {
+                    document.getElementById('id').value = livro.id;
+                    document.getElementById('titulo').value = livro.titulo;
+                    document.getElementById('autor').value = livro.autorId; // Corrigido para autorId
+                    document.getElementById('isbn').value = livro.isbn;
+                });
+                const btnRemover = document.createElement('button');
+                btnRemover.textContent = 'Remover';
+                btnRemover.addEventListener('click', () => {
+                    removerLivro(livro.id);
+                });
+                li.appendChild(btnEditar);
+                li.appendChild(btnRemover);
+                livrosList.appendChild(li);
+            });
+        });
+}
+    
         function salvarLivro(id) {
             const titulo = document.getElementById('titulo').value;
             const autor = document.getElementById('autor').value;
             const isbn = document.getElementById('isbn').value;
-
+    
             fetch('http://localhost:3000/livros' + (id ? `/${id}` : ''), {
                 method: id ? 'PUT' : 'POST',
                 headers: {
@@ -199,7 +224,7 @@
                 // Exibir mensagem de erro para o usuário, se necessário
             });
         }
-
+    
         function removerLivro(id) {
             fetch('http://localhost:3000/livros/' + id, {
                 method: 'DELETE'
@@ -216,14 +241,18 @@
                 // Exibir mensagem de erro para o usuário, se necessário
             });
         }
-
+    
         document.getElementById('livroForm').addEventListener('submit', event => {
             event.preventDefault();
             const id = document.getElementById('id').value;
             salvarLivro(id);
-        });
-
-        carregarLivros();
+        })
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarAutores();
+            carregarLivros();
+        })
     </script>
+    
 </body>
 </html>

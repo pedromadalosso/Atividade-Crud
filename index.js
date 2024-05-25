@@ -55,6 +55,7 @@ app.post('/livros', (req, res) => {
         });
     });
 });
+
 // Read - Obter todos os livros
 app.get('/livros', (req, res) => {
     connection.query('SELECT * FROM livros', (err, result) => {
@@ -66,6 +67,19 @@ app.get('/livros', (req, res) => {
         res.json(result);
     });
 });
+
+// Read - Obter todos os autores
+app.get('/autores', (req, res) => {
+    connection.query('SELECT * FROM autores', (err, result) => {
+        if (err) {
+            console.error('Erro ao obter autores:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.json(result);
+    });
+});
+
 
 // Update - Atualizar um livro existente
 app.put('/livros/:id', (req, res) => {
@@ -95,9 +109,10 @@ app.delete('/livros/:id', (req, res) => {
 });
 
 app.get('/', (req, res) => { 
-    res.sendFile(__dirname + '/index.html'); });
+    res.sendFile(__dirname + '/index.html');
+});
 
 // Iniciar o servidor
 app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${3000}`);
+    console.log(`Servidor rodando em http://localhost:${port}`);
 });
