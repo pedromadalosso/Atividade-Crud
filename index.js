@@ -79,6 +79,21 @@ app.get('/autores', (req, res) => {
         res.json(result);
     });
 });
+// Create - Adicionar um novo autor
+app.post('/autores', (req, res) => {
+    const { nome, nacionalidade } = req.body;
+    
+    console.log(req.body); // Verificar se os dados estão sendo recebidos corretamente
+
+    connection.query('INSERT INTO autores (nome, nacionalidade) VALUES (?, ?)', [nome, nacionalidade], (err, result) => {
+        if (err) {
+            console.error('Erro ao adicionar autor:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.status(201).send('Autor adicionado com sucesso');
+    });
+});
 
 
 // Update - Atualizar um livro existente
@@ -110,6 +125,39 @@ app.delete('/livros/:id', (req, res) => {
 
 app.get('/', (req, res) => { 
     res.sendFile(__dirname + '/index.html');
+});
+app.get('/cadastrar_autor', (req, res) => {
+    res.sendFile(__dirname + '/cadastrar_autor.html');
+});
+// Update - Atualizar um autor existente
+app.put('/autores/:id', (req, res) => {
+    const { nome, nacionalidade } = req.body;
+    const id = req.params.id;
+    connection.query('UPDATE autores SET nome = ?, nacionalidade = ? WHERE id = ?', [nome, nacionalidade, id], (err, result) => {
+        if (err) {
+            console.error('Erro ao atualizar autor:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.send('Autor atualizado com sucesso');
+    });
+});
+
+// Delete - Remover um autor
+app.delete('/autores/:id', (req, res) => {
+    const id = req.params.id;
+    connection.query('DELETE FROM autores WHERE id = ?', [id], (err, result) => {
+        if (err) {
+            console.error('Erro ao remover autor:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.send('Autor removido com sucesso');
+    });
+});
+
+app.get('/cadastrar_autor', (req, res) => {
+    res.sendFile(__dirname + '/cadastrar_autor');
 });
 
 // Iniciar o servidor
