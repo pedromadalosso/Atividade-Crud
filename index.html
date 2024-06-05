@@ -9,181 +9,222 @@
 </head>
 <body>
     <style>
-      
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+        }
+
+        
+
+        .container {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+        }
+
+        .animated-text {
+            display: inline-block;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            animation: moveText 2s ease infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes moveText {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(20px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        form {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        form input[type="text"],
+        form input[type="hidden"],
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: none;
+        }
+
+        li {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li button {
+            padding: 8px 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        li button.edit {
+            background-color: #ffc107;
+        }
+
+        li button.edit:hover {
+            background-color: #ffca2c;
+        }
+
+        li button.remove {
+            margin-left: 10px;
+        }
+
+        li button.remove:hover {
+            background-color: #e74c3c;
+        }
+
+        #alertaLivroExistente {
+            display: none;
+            color: red;
+            margin-bottom: 15px;
+        }
+
+        #toggleLivrosButton {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-bottom: 20px;
+        }
+
+        #toggleLivrosButton:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        #toggleLivrosButton:active {
+            background-color: #004494;
+            transform: scale(0.95);
+        }
+        .sidebar {
+    width: 250px;
+    background-color: #0056b3;
+    color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
     padding: 20px;
-    background-color: #f0f0f0;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-@keyframes moveText {
-    0% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(20px);
-    }
-    100% {
-        transform: translateX(0);
-    }
-}
-
-.animated-text {
-    display: inline-block;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    animation: moveText 2s ease infinite;
-}
-
-form {
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-}
-
-form label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-form input[type="text"],
-form input[type="hidden"],
-form select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 3px;
 }
 
-form button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-bottom: 10px; /* Adiciona espaço entre os botões */
-}
-
-form button:hover {
-    background-color: #0056b3;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-    display: none; /* Inicialmente escondido */
-}
-
-li {
-    padding: 15px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    background-color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-li button {
-    padding: 8px 12px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-}
-
-li button.edit {
-    background-color: #ffc107;
-}
-
-li button.edit:hover {
-    background-color: #ffca2c;
-}
-
-li button.remove {
-    margin-left: 10px;
-}
-
-li button.remove:hover {
-    background-color: #e74c3c;
-}
-
-#alertaLivroExistente {
-    display: none;
-    color: red;
-    margin-bottom: 15px;
-}
-
-#toggleLivrosButton {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
+.sidebar h2 {
+    text-align: center;
     margin-bottom: 20px;
+    color: #ffffff;
 }
 
-#toggleLivrosButton:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
+.sidebar a {
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s;
 }
 
-#toggleLivrosButton:active {
-    background-color: #004494;
-    transform: scale(0.95);
+.sidebar a:hover {
+    background-color: #ffffff;
+    color: #000000;
 }
-
-
     </style>
-    
-    <div class="animated-text">
-        CRUD Biblioteca
+
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="http://localhost:3000">Home</a>
+        <a href="cadastrar_autor">Cadastrar Autor</a>
+        <!-- Adicione outros links conforme necessário -->
     </div>
 
-    <form id="livroForm">
-        <input type="hidden" id="id" name="id">
-        <label for="titulo">Título:</label>
-        <input type="text" id="titulo" name="titulo" required>
-        <label for="autor">Autor:</label>
-        <select id="autor" name="autor" required>
-            <option value="">Selecione um autor</option>
-        </select>
-        <label for="isbn">ISBN:</label>
-        <input type="text" id="isbn" name="isbn" required>
-        <label for="pesquisar">Pesquisar Livros:</label>
-        <input type="text" id="pesquisar" name="pesquisar" placeholder="Digite o título do livro...">
-        <button id="pesquisarBtn">Pesquisar</button>
-        <button class="form-button">Enviar</button>
-        <button id="cadastrarAutorBtn" type="button">Cadastrar Autor</button>
-    </form>
+    <div class="container">
+        <div class="animated-text">
+            CRUD Biblioteca
+        </div>
 
-    <div id="alertaLivroExistente">Livro já cadastrado</div>
+        <form id="livroForm">
+            <input type="hidden" id="id" name="id">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
+            <label for="autor">Autor:</label>
+            <select id="autor" name="autor" required>
+                <option value="">Selecione um autor</option>
+            </select>
+            <label for="isbn">ISBN:</label>
+            <input type="text" id="isbn" name="isbn" required>
+            <label for="pesquisar">Pesquisar Livros:</label>
+            <input type="text" id="pesquisar" name="pesquisar" placeholder="Digite o título do livro...">
+            <!-- Removendo o botão de pesquisa -->
+            <button class="form-button">Enviar</button>
+        </form>
 
-    <button id="toggleLivrosButton">Mostrar Livros</button>
+        <div id="alertaLivroExistente">Livro já cadastrado</div>
 
-    <ul id="livrosList"></ul>
+        <button id="toggleLivrosButton">Mostrar Livros</button>
+
+        <ul id="livrosList"></ul>
+    </div>
 
     <script>
         function carregarAutores() {
@@ -201,57 +242,53 @@ li button.remove:hover {
                 })
                 .catch(error => {
                     console.error('Erro ao carregar autores:', error.message);
-                    // Exibir mensagem de erro para o usuário, se necessário
                 });
         }
-
+    
         function carregarLivros() {
-    fetch('http://localhost:3000/livros')
-        .then(response => response.json())
-        .then(data => {
-            const pesquisarTexto = document.getElementById('pesquisar').value.toLowerCase();
-            const livrosList = document.getElementById('livrosList');
-            livrosList.innerHTML = '';
-            data.forEach(livro => {
-                if (livro.titulo.toLowerCase().includes(pesquisarTexto)) {
-                    const li = document.createElement('li');
-                    li.textContent = `${livro.titulo} - ${livro.autor} - ${livro.isbn}`;
-                    const btnEditar = document.createElement('button');
-                    btnEditar.textContent = 'Editar';
-                    btnEditar.className = 'edit';
-                    btnEditar.addEventListener('click', () => {
-                        document.getElementById('id').value = livro.id;
-                        document.getElementById('titulo').value = livro.titulo;
-                        document.getElementById('autor').value = livro.autorId; // Corrigido para autorId
-                        document.getElementById('isbn').value = livro.isbn;
+            fetch('http://localhost:3000/livros')
+                .then(response => response.json())
+                .then(data => {
+                    const pesquisarTexto = document.getElementById('pesquisar').value.toLowerCase();
+                    const livrosList = document.getElementById('livrosList');
+                    livrosList.innerHTML = '';
+                    data.forEach(livro => {
+                        if (livro.titulo.toLowerCase().includes(pesquisarTexto)) {
+                            const li = document.createElement('li');
+                            li.textContent = `${livro.titulo} - ${livro.autor} - ${livro.isbn}`;
+                            const btnEditar = document.createElement('button');
+                            btnEditar.textContent = 'Editar';
+                            btnEditar.className = 'edit';
+                            btnEditar.addEventListener('click', () => {
+                                document.getElementById('id').value = livro.id;
+                                document.getElementById('titulo').value = livro.titulo;
+                                document.getElementById('autor').value = livro.autorId;
+                                document.getElementById('isbn').value = livro.isbn;
+                            });
+                            const btnRemover = document.createElement('button');
+                            btnRemover.textContent = 'Remover';
+                            btnRemover.className = 'remove';
+                            btnRemover.addEventListener('click', () => {
+                                removerLivro(livro.id);
+                            });
+                            li.appendChild(btnEditar);
+                            li.appendChild(btnRemover);
+                            livrosList.appendChild(li);
+                        }
                     });
-                    const btnRemover = document.createElement('button');
-                    btnRemover.textContent = 'Remover';
-                    btnRemover.className = 'remove';
-                    btnRemover.addEventListener('click', () => {
-                        removerLivro(livro.id);
-                    });
-                    li.appendChild(btnEditar);
-                    li.appendChild(btnRemover);
-                    livrosList.appendChild(li);
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Erro ao carregar livros:', error.message);
-            // Exibir mensagem de erro para o usuário, se necessário
-        });
-}
-
-document.getElementById('pesquisarBtn').addEventListener('click', carregarLivros);
-
-document.getElementById('pesquisar').addEventListener('input', carregarLivros);
-
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar livros:', error.message);
+                });
+        }
+    
+        document.getElementById('pesquisar').addEventListener('input', carregarLivros);
+    
         function salvarLivro(id) {
             const titulo = document.getElementById('titulo').value;
             const autor = document.getElementById('autor').value;
             const isbn = document.getElementById('isbn').value;
-
+    
             fetch('http://localhost:3000/livros' + (id ? `/${id}` : ''), {
                 method: id ? 'PUT' : 'POST',
                 headers: {
@@ -271,53 +308,52 @@ document.getElementById('pesquisar').addEventListener('input', carregarLivros);
             })
             .catch(error => {
                 console.error('Erro ao processar requisição:', error.message);
-                // Exibir mensagem de erro para o usuário, se necessário
             });
         }
-
+    
         function removerLivro(id) {
             fetch('http://localhost:3000/livros/' + id, {
                 method: 'DELETE'
             })
             .then(response => {
                 if (response.ok) {
-                    carregarLivros(); // Atualizar a lista após a remoção
+                    carregarLivros();
                 } else {
                     throw new Error('Erro ao remover livro');
                 }
             })
             .catch(error => {
                 console.error('Erro ao processar requisição:', error.message);
-                // Exibir mensagem de erro para o usuário, se necessário
             });
         }
-
+    
         document.getElementById('livroForm').addEventListener('submit', event => {
             event.preventDefault();
             const id = document.getElementById('id').value;
             salvarLivro(id);
         });
-
+    
         document.getElementById('toggleLivrosButton').addEventListener('click', () => {
             const livrosList = document.getElementById('livrosList');
             if (livrosList.style.display === 'none' || livrosList.style.display === '') {
                 livrosList.style.display = 'block';
                 document.getElementById('toggleLivrosButton').textContent = 'Esconder Livros';
-                carregarLivros(); // Certifique-se de carregar os livros ao mostrar a lista
+                carregarLivros();
             } else {
                 livrosList.style.display = 'none';
                 document.getElementById('toggleLivrosButton').textContent = 'Mostrar Livros';
             }
         });
-
+    
         document.addEventListener('DOMContentLoaded', () => {
             carregarAutores();
             carregarLivros();
         });
+    
         document.getElementById('cadastrarAutorBtn').addEventListener('click', () => {
-    window.location.href = 'cadastrar_autor'; // Redireciona para a página de cadastro de autor
-});
-
+            window.location.href = 'cadastrar_autor';
+        });
     </script>
+    
 </body>
 </html>

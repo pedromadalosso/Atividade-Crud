@@ -7,128 +7,178 @@
     <title>Cadastrar Autor</title>
 </head>
 <style>
- 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
-        }
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    display: flex;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+.sidebar {
+    width: 250px;
+    background-color: #0056b3;
+    color: #ffffff; /* Alterado para branco para melhor legibilidade */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Alterado para ocupar a altura total da tela */
+    padding: 20px;
+    box-sizing: border-box;
+}
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff; /* Alterado para branco para melhor legibilidade */
+}
 
-        form {
-            display: flex;
-            flex-direction: column;
-        }
+.sidebar a {
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s;
+}
 
-        label {
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
+.sidebar a:hover {
+    background-color: #ffffff;
+    color: #000000; /* Alterado para preto para melhor legibilidade */
+}
 
-        input[type="text"] {
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
+.container {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+    box-sizing: border-box;
+    max-width: 100%; /* Alterado para ocupar a largura total da tela */
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-        button[type="submit"] {
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Alterado para ocupar a largura total da tela */
+}
 
-        .alert {
-            color: red;
-            margin-top: 15px;
-            text-align: center;
-        }
+label {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
 
-        .autores-container {
-            display: block;
-            margin-top: 20px;
-        }
+input[type="text"] {
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 100%; /* Alterado para ocupar a largura total da tela */
+}
 
-        .autores-container ul {
-            list-style-type: none;
-            padding: 0;
-        }
+button[type="submit"] {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Alterado para ocupar a largura total da tela */
+}
 
-        .autores-container li {
-            padding: 15px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            background-color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
 
-        .autores-container li button {
-            padding: 8px 12px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-        }
+.alert {
+    color: red;
+    margin-top: 15px;
+    text-align: center;
+}
 
-        .autores-container li button.edit {
-            background-color: #ffc107;
-        }
+.autores-container {
+    display: block;
+    margin-top: 20px;
+}
 
-        .autores-container li button.edit:hover {
-            background-color: #ffca2c;
-        }
+.autores-container ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-        .autores-container li button.remove {
-            margin-left: 10px;
-        }
+.autores-container li {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .autores-container li button.remove:hover {
-            background-color: #e74c3c;
-        }
-    </style>
+.autores-container li button {
+    padding: 8px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.autores-container li button.edit {
+    background-color: #ffc107;
+}
+
+.autores-container li button.edit:hover {
+    background-color: #ffca2c;
+}
+
+.autores-container li button.remove {
+    margin-left: 10px;
+}
+
+.autores-container li button.remove:hover {
+    background-color: #e74c3c;
+
+}
+
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <h2>Cadastrar Autor</h2>
-        <form id="autorForm">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" required>
-            <label for="nacionalidade">Nacionalidade:</label>
-            <input type="text" id="nacionalidade" name="nacionalidade" required>
-            <button type="submit">Cadastrar</button>
-        </form>
-        
-        <div class="autores-container">
-            <h2>Lista de Autores</h2>
-            <input type="text" id="pesquisarAutor" placeholder="Pesquisar autor...">
-            <ul id="autoresList"></ul>
-        </div>
+<div class="sidebar">
+    <h2>Menu</h2>
+    <a href="http://localhost:3000">Home</a>
+    <a href="#">Cadastrar Autor</a>
+    
+    <!-- Adicione mais links conforme necessário -->
+</div>
+
+<div class="container">
+    <h2>Cadastrar Autor</h2>
+    <form id="autorForm">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        <label for="nacionalidade">Nacionalidade:</label>
+        <input type="text" id="nacionalidade" name="nacionalidade" required>
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <div class="autores-container">
+        <h2>Lista de Autores</h2>
+        <input type="text" id="pesquisarAutor" placeholder="Pesquisar autor...">
+        <ul id="autoresList"></ul>
     </div>
+</div>
+</head>
+
     <script>
       
       function carregarAutores() {
