@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Inicial</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #004494;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #ffa500;
+}
+
+main {
+    padding: 2rem;
+}
+
+main section {
+    margin-bottom: 2rem;
+}
+
+main section h2 {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    color: #004494;
+}
+
+footer {
+    background-color: #004494;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+</style>
+<body>
+    <header>
+        <h1>Trabalho CRUD</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="index">Cadastrar Livro</a></li>
+                <li><a href="cadastrar_autor">Cadastrar Autor</a></li>
+                <!-- Remova este item se não tiver uma seção de contato -->
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="home">
+            <h2>Bem-vindo ao nosso Trabalho!</h2>
+            <p>Navegue pelas opções acima para saber mais sobre as tabelas e suas funções.</p>
+        </section>
+        <section id="about">
+            <h2>Alunos</h2>
+            <p>Flavio Emanuel Leite Pinto</p>
+            <p>Rafaela Boldrine Lopes</p>
+            <p>Pedro Ronald Madalosso</p>
+            <p>Erick Gabriel Viapiana Moreschi</p>
+            <p>Matheus Weiber Da Silva</p>
+        </section>
+        <section id="services">
+            <h2>Sobre o Trabalho</h2>
+            <p>O trabalho bimestral consiste em fazer CRUD's das tabelas utilizadas no trabalho da disciplina de Banco de Dados. Essa atividade deverá ter no mínimo 10 tabelas, sendo que, não necessariamente deverá ter 10 telas para realizar o CRUD, ou seja, uma tela pode ser gravados dados em mais de uma tabela, de acordo com dependências.</p>
+            <p>Vocês podem utilizar as mesmas tecnologias e ferramentas utilizadas na atividade do primeiro bimestre, bem como poderão realizar nos mesmos grupos. Durante as aulas serão realizadas as verificações da evolução para acompanhamento da atividade. Não será necessário entrega da atividade, pois a correção e avaliação serão durante as aulas.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 CRUD. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

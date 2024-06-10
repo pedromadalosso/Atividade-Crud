@@ -19,17 +19,17 @@ connection.connect((err) => {
         console.error('Erro ao conectar: ' + err.stack);
         return;
     }
-
     console.log('Conexão bem sucedida com o ID ' + connection.threadId);
 });
 
 // Middleware para tratar o corpo das requisições como JSON
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Create - Adicionar um novo livro
 app.post('/livros', (req, res) => {
     const { titulo, autor, isbn } = req.body;
-    
+
     // Verificar se o livro já existe
     connection.query('SELECT * FROM livros WHERE titulo = ? AND autor = ? AND isbn = ?', [titulo, autor, isbn], (err, result) => {
         if (err) {
@@ -79,10 +79,11 @@ app.get('/autores', (req, res) => {
         res.json(result);
     });
 });
+
 // Create - Adicionar um novo autor
 app.post('/autores', (req, res) => {
     const { nome, nacionalidade } = req.body;
-    
+
     console.log(req.body); // Verificar se os dados estão sendo recebidos corretamente
 
     connection.query('INSERT INTO autores (nome, nacionalidade) VALUES (?, ?)', [nome, nacionalidade], (err, result) => {
@@ -94,7 +95,6 @@ app.post('/autores', (req, res) => {
         res.status(201).send('Autor adicionado com sucesso');
     });
 });
-
 
 // Update - Atualizar um livro existente
 app.put('/livros/:id', (req, res) => {
@@ -123,12 +123,6 @@ app.delete('/livros/:id', (req, res) => {
     });
 });
 
-app.get('/', (req, res) => { 
-    res.sendFile(__dirname + '/index.html');
-});
-app.get('/cadastrar_autor', (req, res) => {
-    res.sendFile(__dirname + '/cadastrar_autor.html');
-});
 // Update - Atualizar um autor existente
 app.put('/autores/:id', (req, res) => {
     const { nome, nacionalidade } = req.body;
@@ -156,8 +150,17 @@ app.delete('/autores/:id', (req, res) => {
     });
 });
 
+// Rota principal servindo o arquivo home.html
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/home.html');
+});
+
+// Rota para a página de cadastro de autores
 app.get('/cadastrar_autor', (req, res) => {
-    res.sendFile(__dirname + '/cadastrar_autor');
+    res.sendFile(__dirname + '/cadastrar_autor.html');
+});
+app.get('/index', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
 });
 
 // Iniciar o servidor
