@@ -149,6 +149,112 @@ app.delete('/autores/:id', (req, res) => {
         res.send('Autor removido com sucesso');
     });
 });
+// Create - Adicionar uma nova editora
+app.post('/editoras', (req, res) => {
+    const { nome, localizacao } = req.body;
+
+    connection.query('INSERT INTO editoras (nome, localizacao) VALUES (?, ?)', [nome, localizacao], (err, result) => {
+        if (err) {
+            console.error('Erro ao adicionar editora:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.status(201).send('Editora adicionada com sucesso');
+    });
+});
+
+// Read - Obter todas as editoras
+app.get('/editoras', (req, res) => {
+    connection.query('SELECT * FROM editoras', (err, result) => {
+        if (err) {
+            console.error('Erro ao obter editoras:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.json(result);
+    });
+});
+
+// Update - Atualizar uma editora existente
+app.put('/editoras/:id', (req, res) => {
+    const { nome, localizacao } = req.body;
+    const id = req.params.id;
+    connection.query('UPDATE editoras SET nome = ?, localizacao = ? WHERE id = ?', [nome, localizacao, id], (err, result) => {
+        if (err) {
+            console.error('Erro ao atualizar editora:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.send('Editora atualizada com sucesso');
+    });
+});
+
+// Delete - Remover uma editora
+app.delete('/editoras/:id', (req, res) => {
+    const id = req.params.id;
+    connection.query('DELETE FROM editoras WHERE id = ?', [id], (err, result) => {
+        if (err) {
+            console.error('Erro ao remover editora:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.send('Editora removida com sucesso');
+    });
+});
+// Create - Adicionar uma nova categoria
+app.post('/categorias', (req, res) => {
+    const { descricao } = req.body;
+
+    connection.query('INSERT INTO categorias (descricao) VALUES (?)', [descricao], (err, result) => {
+        if (err) {
+            console.error('Erro ao adicionar categoria:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.status(201).send('Categoria adicionada com sucesso');
+    });
+});
+
+// Read - Obter todas as categorias
+app.get('/categorias', (req, res) => {
+    connection.query('SELECT * FROM categorias', (err, result) => {
+        if (err) {
+            console.error('Erro ao obter categorias:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.json(result);
+    });
+});
+
+
+// Update - Atualizar uma categoria existente
+app.put('/categorias/:id', (req, res) => {
+    const { descricao } = req.body;
+    const id = req.params.id;
+    connection.query('UPDATE categorias SET descricao = ? WHERE id = ?', [descricao, id], (err, result) => {
+        if (err) {
+            console.error('Erro ao atualizar categoria:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.send('Categoria atualizada com sucesso');
+    });
+});
+
+// Delete - Remover uma categoria
+app.delete('/categorias/:id', (req, res) => {
+    const id = req.params.id;
+    connection.query('DELETE FROM categorias WHERE id = ?', [id], (err, result) => {
+        if (err) {
+            console.error('Erro ao remover categoria:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.send('Categoria removida com sucesso');
+    });
+});
+
 
 // Rota principal servindo o arquivo home.html
 app.get('/', (req, res) => {
@@ -162,6 +268,12 @@ app.get('/cadastrar_autor', (req, res) => {
 app.get('/index', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
+app.get('/editora', (req, res) => {
+    res.sendFile(__dirname + '/editoras.html');
+}); 
+app.get('/categoria', (req, res) => {
+    res.sendFile(__dirname + '/categorias.html');
+}); 
 
 // Iniciar o servidor
 app.listen(port, () => {

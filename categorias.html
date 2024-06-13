@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Categoria</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #0056b3;
+            color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #004080;
+        }
+
+        .container {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+            max-width: 100%;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        button[type="submit"] {
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .alert {
+            color: red;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .categorias-container {
+            display: block;
+            margin-top: 20px;
+        }
+
+        .categorias-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .categorias-container li {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .categorias-container li button {
+            padding: 8px 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .categorias-container li button.edit {
+            background-color: #ffc107;
+        }
+
+        .categorias-container li button.edit:hover {
+            background-color: #ffca2c;
+        }
+
+        .categorias-container li button.remove {
+            margin-left: 10px;
+        }
+
+        .categorias-container li button.remove:hover {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="http://localhost:3000">Home</a>
+        <a href="editora">Cadastrar Editora</a>
+        <a href="cadastrar_autor">Cadastrar Autor</a>
+        <a href="index">Cadastrar Livro</a>
+        <a href="categoria">Categorias</a>
+        <!-- Adicione mais links conforme necessário -->
+    </div>
+
+    <div class="container">
+        <h2>Cadastrar Categoria</h2>
+        <form id="categoriaForm">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required>
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <div class="categorias-container">
+            <h2>Lista de Categorias</h2>
+            <input type="text" id="pesquisarCategoria" placeholder="Pesquisar categoria...">
+            <ul id="categoriasList"></ul>
+        </div>
+    </div>
+    <script>
+        function carregarCategorias() {
+            fetch('http://localhost:3000/categorias')
+                .then(response => response.json())
+                .then(data => {
+                    const pesquisarTexto = document.getElementById('pesquisarCategoria').value.toLowerCase();
+                    const categoriasList = document.getElementById('categoriasList');
+                    categoriasList.innerHTML = '';
+                    data.forEach(categoria => {
+                        if (categoria.descricao.toLowerCase().includes(pesquisarTexto)) {
+                            const li = document.createElement('li');
+                            li.textContent = `${categoria.descricao}`;
+                            const editButton = document.createElement('button');
+                            editButton.textContent = 'Editar';
+                            editButton.classList.add('edit');
+                            editButton.addEventListener('click', () => editarCategoria(categoria.id, categoria.descricao));
+                            const removeButton = document.createElement('button');
+                            removeButton.textContent = 'Excluir';
+                            removeButton.classList.add('remove');
+                            removeButton.addEventListener('click', () => excluirCategoria(categoria.id));
+                            li.appendChild(editButton);
+                            li.appendChild(removeButton);
+                            categoriasList.appendChild(li);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar categorias:', error.message);
+                    // Exibir mensagem de erro para o usuário, se necessário
+                });
+        }
+    
+        function cadastrarCategoria(event) {
+            event.preventDefault();
+            const descricao = document.getElementById('descricao').value;
+    
+            if (descricao) {
+                fetch('http://localhost:3000/categorias', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ descricao })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Categoria cadastrada com sucesso');
+                        carregarCategorias();
+                    } else {
+                        throw new Error('Erro ao cadastrar categoria');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao processar requisição:', error.message);
+                    alert('Erro ao cadastrar categoria. Verifique o console para mais informações.');
+                });
+            }
+        }
+    
+        document.getElementById('categoriaForm').addEventListener('submit', cadastrarCategoria);
+    
+        function editarCategoria(id, descricaoAtual) {
+            const form = document.createElement('form');
+            form.innerHTML = `
+                <label for="novaDescricao">Nova Descrição:</label>
+                <input type="text" id="novaDescricao" name="novaDescricao" value="${descricaoAtual}" required>
+                <button type="submit">Atualizar</button>
+            `;
+    
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const novaDescricao = document.getElementById('novaDescricao').value;
+    
+                if (novaDescricao) {
+                    fetch(`http://localhost:3000/categorias/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ descricao: novaDescricao })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Categoria atualizada com sucesso');
+                            carregarCategorias();
+                        } else {
+                            throw new Error('Erro ao editar categoria');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao processar requisição:', error.message);
+                        alert('Erro ao editar categoria. Verifique o console para mais informações.');
+                    });
+                }
+            });
+    
+            const categoriasList = document.getElementById('categoriasList');
+            categoriasList.innerHTML = '';
+            categoriasList.appendChild(form);
+        }
+    
+        function excluirCategoria(id) {
+            if (confirm('Tem certeza que deseja excluir esta categoria?')) {
+                fetch(`http://localhost:3000/categorias/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Categoria excluída com sucesso');
+                        carregarCategorias();
+                    } else {
+                        throw new Error('Erro ao excluir categoria');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao processar requisição:', error.message);
+                    alert('Erro ao excluir categoria. Verifique o console para mais informações.');
+                });
+            }
+        }
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarCategorias();
+        });
+    </script>
+    
+    
+</body>
+</html>

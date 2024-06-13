@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Autor</title>
+    <title>Cadastrar Editora</title>
 </head>
 <style>
     body {
@@ -16,36 +16,37 @@
     }
 
     .sidebar {
-            width: 250px;
-            background-color: #0056b3;
-            color: #ffffff;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        width: 250px;
+        background-color: #0056b3;
+        color: #ffffff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        .sidebar h2 {
-            margin-bottom: 20px;
-        }
+    .sidebar h2 {
+        margin-bottom: 20px;
+    }
 
-        .sidebar a {
-            color: #ffffff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            transition: background-color 0.3s;
-        }
+    .sidebar a {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        transition: background-color 0.3s;
+    }
 
-        .sidebar a:hover {
-            background-color: #004080;
-        }
+    .sidebar a:hover {
+        background-color: #004080;
+    }
+
     .container {
         margin-left: 250px;
         padding: 20px;
@@ -101,17 +102,17 @@
         text-align: center;
     }
 
-    .autores-container {
+    .editoras-container {
         display: block;
         margin-top: 20px;
     }
 
-    .autores-container ul {
+    .editoras-container ul {
         list-style-type: none;
         padding: 0;
     }
 
-    .autores-container li {
+    .editoras-container li {
         padding: 15px;
         margin-bottom: 10px;
         border: 1px solid #ccc;
@@ -122,7 +123,7 @@
         align-items: center;
     }
 
-    .autores-container li button {
+    .editoras-container li button {
         padding: 8px 12px;
         background-color: #dc3545;
         color: white;
@@ -131,186 +132,185 @@
         cursor: pointer;
     }
 
-    .autores-container li button.edit {
+    .editoras-container li button.edit {
         background-color: #ffc107;
     }
 
-    .autores-container li button.edit:hover {
+    .editoras-container li button.edit:hover {
         background-color: #ffca2c;
     }
 
-    .autores-container li button.remove {
+    .editoras-container li button.remove {
         margin-left: 10px;
     }
 
-    .autores-container li button.remove:hover {
+    .editoras-container li button.remove:hover {
         background-color: #e74c3c;
     }
 </style>
 
-    </head>
+</head>
     
-    <body>
-        <div class="sidebar">
-            <h2>Menu</h2>
-            <a href="http://localhost:3000">Home</a>
-            <a href="editora">Cadastrar Editora</a>
-            <a href="#">Cadastrar Autor</a>
-            <a href="index">Cadastrar Livro</a>
-            <a href="categoria">Categorias</a>
-            
-            <!-- Adicione mais links conforme necessário -->
-        </div>
-    
+<body>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="http://localhost:3000">Home</a>
+        <a href="#">Cadastrar Editora</a>
+        <a href="cadastrar_autor">Cadastrar Autor</a>
+        <a href="index">Cadastrar Livro</a>
+        <a href="categoria">Categorias</a>
+        <!-- Adicione mais links conforme necessário -->
+    </div>
+
     <div class="container">
-        <h2>Cadastrar Autor</h2>
-        <form id="autorForm">
+        <h2>Cadastrar Editora</h2>
+        <form id="editoraForm">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" required>
-            <label for="nacionalidade">Nacionalidade:</label>
-            <input type="text" id="nacionalidade" name="nacionalidade" required>
+            <label for="localizacao">Localização:</label>
+            <input type="text" id="localizacao" name="localizacao" required>
             <button type="submit">Cadastrar</button>
         </form>
-    
-        <div class="autores-container">
-            <h2>Lista de Autores</h2>
-            <input type="text" id="pesquisarAutor" placeholder="Pesquisar autor...">
-            <ul id="autoresList"></ul>
+
+        <div class="editoras-container">
+            <h2>Lista de Editoras</h2>
+            <input type="text" id="pesquisarEditora" placeholder="Pesquisar editora...">
+            <ul id="editorasList"></ul>
         </div>
     </div>
-    </head>
+
     <script>
-        function carregarAutores() {
-            fetch('http://localhost:3000/autores')
+        function carregarEditoras() {
+            fetch('http://localhost:3000/editoras')
                 .then(response => response.json())
                 .then(data => {
-                    const pesquisarTexto = document.getElementById('pesquisarAutor').value.toLowerCase();
-                    const autoresList = document.getElementById('autoresList');
-                    autoresList.innerHTML = '';
-                    data.forEach(autor => {
-                        if (autor.nome.toLowerCase().includes(pesquisarTexto)) {
+                    const pesquisarTexto = document.getElementById('pesquisarEditora').value.toLowerCase();
+                    const editorasList = document.getElementById('editorasList');
+                    editorasList.innerHTML = '';
+                    data.forEach(editora => {
+                        if (editora.nome.toLowerCase().includes(pesquisarTexto)) {
                             const li = document.createElement('li');
-                            li.textContent = `${autor.nome} - ${autor.nacionalidade}`;
+                            li.textContent = `${editora.nome} - ${editora.localizacao}`;
                             const editButton = document.createElement('button');
                             editButton.textContent = 'Editar';
                             editButton.classList.add('edit');
-                            editButton.addEventListener('click', () => editarAutor(autor.id, autor.nome, autor.nacionalidade));
+                            editButton.addEventListener('click', () => editarEditora(editora.id, editora.nome, editora.localizacao));
                             const removeButton = document.createElement('button');
                             removeButton.textContent = 'Excluir';
                             removeButton.classList.add('remove');
-                            removeButton.addEventListener('click', () => excluirAutor(autor.id));
+                            removeButton.addEventListener('click', () => excluirEditora(editora.id));
                             li.appendChild(editButton);
                             li.appendChild(removeButton);
-                            autoresList.appendChild(li);
+                            editorasList.appendChild(li);
                         }
                     });
                 })
                 .catch(error => {
-                    console.error('Erro ao carregar autores:', error.message);
+                    console.error('Erro ao carregar editoras:', error.message);
                     // Exibir mensagem de erro para o usuário, se necessário
                 });
         }
-        
-        function cadastrarAutor(event) {
+
+        function cadastrarEditora(event) {
             event.preventDefault();
             const nome = document.getElementById('nome').value;
-            const nacionalidade = document.getElementById('nacionalidade').value;
-        
-            if (nome && nacionalidade) {
-                fetch('http://localhost:3000/autores', {
+            const localizacao = document.getElementById('localizacao').value;
+
+            if (nome && localizacao) {
+                fetch('http://localhost:3000/editoras', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ nome, nacionalidade })
+                    body: JSON.stringify({ nome, localizacao })
                 })
                 .then(response => {
                     if (response.ok) {
-                        alert('Autor cadastrado com sucesso');
-                        carregarAutores();
+                        alert('Editora cadastrada com sucesso');
+                        carregarEditoras();
                     } else {
-                        throw new Error('Erro ao cadastrar autor');
+                        throw new Error('Erro ao cadastrar editora');
                     }
                 })
                 .catch(error => {
                     console.error('Erro ao processar requisição:', error.message);
-                    alert('Erro ao cadastrar autor. Verifique o console para mais informações.');
+                    alert('Erro ao cadastrar editora. Verifique o console para mais informações.');
                 });
             }
         }
-        
-        document.getElementById('autorForm').addEventListener('submit', cadastrarAutor);
-        
-        function editarAutor(id, nomeAtual, nacionalidadeAtual) {
+
+        document.getElementById('editoraForm').addEventListener('submit', cadastrarEditora);
+
+        function editarEditora(id, nomeAtual, localizacaoAtual) {
             const form = document.createElement('form');
             form.innerHTML = `
                 <label for="novoNome">Novo Nome:</label>
                 <input type="text" id="novoNome" name="novoNome" value="${nomeAtual}" required>
-                <label for="novaNacionalidade">Nova Nacionalidade:</label>
-                <input type="text" id="novaNacionalidade" name="novaNacionalidade" value="${nacionalidadeAtual}" required>
+                <label for="novaLocalizacao">Nova Localização:</label>
+                <input type="text" id="novaLocalizacao" name="novaLocalizacao" value="${localizacaoAtual}" required>
                 <button type="submit">Atualizar</button>
             `;
-        
+
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const novoNome = document.getElementById('novoNome').value;
-                const novaNacionalidade = document.getElementById('novaNacionalidade').value;
-        
-                if (novoNome && novaNacionalidade) {
-                    fetch(`http://localhost:3000/autores/${id}`, {
+                const novaLocalizacao = document.getElementById('novaLocalizacao').value;
+
+                if (novoNome && novaLocalizacao) {
+                    fetch(`http://localhost:3000/editoras/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ nome: novoNome, nacionalidade: novaNacionalidade })
+                        body: JSON.stringify({ nome: novoNome, localizacao: novaLocalizacao })
                     })
                     .then(response => {
                         if (response.ok) {
-                            alert('Autor atualizado com sucesso');
-                            carregarAutores();
+                            alert('Editora atualizada com sucesso');
+                            carregarEditoras();
                         } else {
-                            throw new Error('Erro ao editar autor');
+                            throw new Error('Erro ao editar editora');
                         }
                     })
                     .catch(error => {
                         console.error('Erro ao processar requisição:', error.message);
-                        alert('Erro ao editar autor. Verifique o console para mais informações.');
+                        alert('Erro ao editar editora. Verifique o console para mais informações.');
                     });
                 }
             });
-        
-            const autoresList = document.getElementById('autoresList');
-            autoresList.innerHTML = '';
-            autoresList.appendChild(form);
+
+            const editorasList = document.getElementById('editorasList');
+            editorasList.innerHTML = '';
+            editorasList.appendChild(form);
         }
-        
-        function excluirAutor(id) {
-            if (confirm('Tem certeza que deseja excluir este autor?')) {
-                fetch(`http://localhost:3000/autores/${id}`, {
+
+        function excluirEditora(id) {
+            if (confirm('Tem certeza que deseja excluir esta editora?')) {
+                fetch(`http://localhost:3000/editoras/${id}`, {
                     method: 'DELETE'
                 })
                 .then(response => {
                     if (response.ok) {
-                        alert('Autor excluído com sucesso');
-                        carregarAutores();
+                        alert('Editora excluída com sucesso');
+                        carregarEditoras();
                     } else {
-                        throw new Error('Erro ao excluir autor');
+                        throw new Error('Erro ao excluir editora');
                     }
                 })
                 .catch(error => {
                     console.error('Erro ao processar requisição:', error.message);
-                    alert('Erro ao excluir autor. Verifique o console para mais informações.');
+                    alert('Erro ao excluir editora. Verifique o console para mais informações.');
                 });
             }
         }
-        
-        document.getElementById('pesquisarAutor').addEventListener('input', carregarAutores);
-        
+
+        document.getElementById('pesquisarEditora').addEventListener('input', carregarEditoras);
+
         document.addEventListener('DOMContentLoaded', () => {
-            carregarAutores();
+            carregarEditoras();
         });
-        
-        </script>
-        
+    </script>
+
 </body>
 </html>
+
