@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Reserva</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        display: flex;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: #0056b3;
+        color: #ffffff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar h2 {
+        margin-bottom: 20px;
+    }
+
+    .sidebar a {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+        background-color: #004080;
+    }
+
+    .container {
+        margin-left: 250px;
+        padding: 20px;
+        width: calc(100% - 250px);
+        box-sizing: border-box;
+        max-width: 100%;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    label {
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    input[type="text"], input[type="date"] {
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        width: 100%;
+    }
+
+    button[type="submit"] {
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    .alert {
+        color: red;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .reservas-container {
+        display: block;
+        margin-top: 20px;
+    }
+
+    .reservas-container ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .reservas-container li {
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background-color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .reservas-container li button {
+        padding: 8px 12px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+
+    .reservas-container li button.edit {
+        background-color: #ffc107;
+    }
+
+    .reservas-container li button.edit:hover {
+        background-color: #ffca2c;
+    }
+
+    .reservas-container li button.remove {
+        margin-left: 10px;
+    }
+
+    .reservas-container li button.remove:hover {
+        background-color: #e74c3c;
+    }
+</style>
+
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="http://localhost:3000">Home</a>
+        <a href="editora">Cadastrar Editora</a>
+        <a href="cadastrar_autor">Cadastrar Autor</a>
+        <a href="index">Cadastrar Livro</a>
+        <a href="categoria">Categorias</a>
+        <a href="detalhes">detalhes Livros</a>
+        <a href="reservaa">Reservas</a>
+        <!-- Adicione mais links conforme necessário -->
+    </div>
+
+    <div class="container">
+        <h2>Cadastrar Reserva</h2>
+        <form id="reservaForm">
+            <label for="livro_id">ID do Livro:</label>
+            <input type="text" id="livro_id" name="livro_id" required>
+            <label for="usuario_id">ID do Usuário:</label>
+            <input type="text" id="usuario_id" name="usuario_id" required>
+            <label for="data_reserva">Data da Reserva:</label>
+            <input type="date" id="data_reserva" name="data_reserva" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <div class="reservas-container">
+            <h2>Lista de Reservas</h2>
+            <input type="text" id="pesquisarReserva" placeholder="Pesquisar reserva...">
+            <ul id="reservasList"></ul>
+        </div>
+    </div>
+
+<script>
+    function carregarReservas() {
+        fetch('http://localhost:3000/reservas')
+            .then(response => response.json())
+            .then(data => {
+                const pesquisarTexto = document.getElementById('pesquisarReserva').value.toLowerCase();
+                const reservasList = document.getElementById('reservasList');
+                reservasList.innerHTML = '';
+                data.forEach(reserva => {
+                    if (reserva.livro_id.toString().toLowerCase().includes(pesquisarTexto) || reserva.usuario_id.toString().toLowerCase().includes(pesquisarTexto)) {
+                        const li = document.createElement('li');
+                        li.textContent = `Livro ID: ${reserva.livro_id} - Usuário ID: ${reserva.usuario_id} - Data: ${reserva.data_reserva}`;
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Editar';
+                        editButton.classList.add('edit');
+                        editButton.addEventListener('click', () => editarReserva(reserva.id, reserva.livro_id, reserva.usuario_id, reserva.data_reserva));
+                        const removeButton = document.createElement('button');
+                        removeButton.textContent = 'Excluir';
+                        removeButton.classList.add('remove');
+                        removeButton.addEventListener('click', () => excluirReserva(reserva.id));
+                        li.appendChild(editButton);
+                        li.appendChild(removeButton);
+                        reservasList.appendChild(li);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar reservas:', error.message);
+            });
+    }
+
+    function cadastrarReserva(event) {
+        event.preventDefault();
+        const livro_id = document.getElementById('livro_id').value;
+        const usuario_id = document.getElementById('usuario_id').value;
+        const data_reserva = document.getElementById('data_reserva').value;
+
+        if (livro_id && usuario_id && data_reserva) {
+            fetch('http://localhost:3000/reservas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ livro_id, usuario_id, data_reserva })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Reserva cadastrada com sucesso');
+                    carregarReservas();
+                } else {
+                    throw new Error('Erro ao cadastrar reserva');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar requisição:', error.message);
+                alert('Erro ao cadastrar reserva. Verifique o console para mais informações.');
+            });
+        }
+    }
+
+    document.getElementById('reservaForm').addEventListener('submit', cadastrarReserva);
+
+    function editarReserva(id, livro_idAtual, usuario_idAtual, data_reservaAtual) {
+        const form = document.createElement('form');
+        form.innerHTML = `
+            <label for="novoLivroId">Novo Livro ID:</label>
+            <input type="text" id="novoLivroId" name="novoLivroId" value="${livro_idAtual}" required>
+            <label for="novoUsuarioId">Novo Usuário ID:</label>
+            <input type="text" id="novoUsuarioId" name="novoUsuarioId" value="${usuario_idAtual}" required>
+            <label for="novaDataReserva">Nova Data da Reserva:</label>
+            <input type="date" id="novaDataReserva" name="novaDataReserva" value="${data_reservaAtual}" required>
+            <button type="submit">Atualizar</button>
+        `;
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const novoLivroId = document.getElementById('novoLivroId').value;
+            const novoUsuarioId = document.getElementById('novoUsuarioId').value;
+            const novaDataReserva = document.getElementById('novaDataReserva').value;
+
+            if (novoLivroId && novoUsuarioId && novaDataReserva) {
+                fetch(`http://localhost:3000/reservas/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ livro_id: novoLivroId, usuario_id: novoUsuarioId, data_reserva: novaDataReserva })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Reserva atualizada com sucesso');
+                        carregarReservas();
+                    } else {
+                        throw new Error('Erro ao editar reserva');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao processar requisição:', error.message);
+                    alert('Erro ao editar reserva. Verifique o console para mais informações.');
+                });
+            }
+        });
+
+        const reservasList = document.getElementById('reservasList');
+        reservasList.innerHTML = '';
+        reservasList.appendChild(form);
+    }
+
+    function excluirReserva(id) {
+        if (confirm('Tem certeza que deseja excluir esta reserva?')) {
+            fetch(`http://localhost:3000/reservas/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Reserva excluída com sucesso');
+                    carregarReservas();
+                } else {
+                    throw new Error('Erro ao excluir reserva');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar requisição:', error.message);
+                alert('Erro ao excluir reserva. Verifique o console para mais informações.');
+            });
+        }
+    }
+
+    document.getElementById('pesquisarReserva').addEventListener('input', carregarReservas);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        carregarReservas();
+    });
+</script>
+
+</body>
+</html>

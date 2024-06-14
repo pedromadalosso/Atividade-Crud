@@ -254,14 +254,131 @@ app.delete('/categorias/:id', (req, res) => {
         res.send('Categoria removida com sucesso');
     });
 });
+// Create - Adicionar um novo detalhe do livro
+app.post('/detalhes_livro', (req, res) => {
+    const { livro_id, resumo, criticas, edicoes_especiais, premios, notas_adicionais } = req.body;
 
+    connection.query(
+        'INSERT INTO detalhes_livro (livro_id, resumo, criticas, edicoes_especiais, premios, notas_adicionais) VALUES (?, ?, ?, ?, ?, ?)',
+        [livro_id, resumo, criticas, edicoes_especiais, premios, notas_adicionais],
+        (err, result) => {
+            if (err) {
+                console.error('Erro ao adicionar detalhes do livro:', err);
+                res.status(500).json({ message: 'Erro interno no servidor' });
+                return;
+            }
+            res.status(201).json({ message: 'Detalhes do livro adicionados com sucesso' });
+        }
+    );
+});
+
+// Read - Obter todos os detalhes do livro
+app.get('/detalhes_livro', (req, res) => {
+    connection.query('SELECT * FROM detalhes_livro', (err, result) => {
+        if (err) {
+            console.error('Erro ao obter detalhes do livro:', err);
+            res.status(500).json({ message: 'Erro interno no servidor' });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+// Update - Atualizar detalhes do livro
+app.put('/detalhes_livro/:livro_id', (req, res) => {
+    const { resumo, criticas, edicoes_especiais, premios, notas_adicionais } = req.body;
+    const livro_id = req.params.livro_id; // Capturar o livro_id da URL
+
+    connection.query(
+        'UPDATE detalhes_livro SET resumo = ?, criticas = ?, edicoes_especiais = ?, premios = ?, notas_adicionais = ? WHERE livro_id = ?',
+        [resumo, criticas, edicoes_especiais, premios, notas_adicionais, livro_id],
+        (err, result) => {
+            if (err) {
+                console.error('Erro ao atualizar detalhes do livro:', err);
+                res.status(500).json({ message: 'Erro interno no servidor' });
+                return;
+            }
+            res.json({ message: 'Detalhes do livro atualizados com sucesso' });
+        }
+    );
+});
+
+
+// Delete - Remover detalhes do livro
+app.delete('/detalhes_livro/:livro_id', (req, res) => {
+    const livro_id = req.params.livro_id;
+
+    connection.query('DELETE FROM detalhes_livro WHERE livro_id = ?', [livro_id], (err, result) => {
+        if (err) {
+            console.error('Erro ao remover detalhes do livro:', err);
+            res.status(500).json({ message: 'Erro interno no servidor' });
+            return;
+        }
+        res.json({ message: 'Detalhes do livro removidos com sucesso' });
+    });
+});
+
+// Create - Adicionar uma nova reserva
+app.post('/reservas', (req, res) => {
+    const { livro_id, usuario_id, data_reserva } = req.body;
+
+    connection.query('INSERT INTO reservas (livro_id, usuario_id, data_reserva) VALUES (?, ?, ?)', [livro_id, usuario_id, data_reserva], (err, result) => {
+        if (err) {
+            console.error('Erro ao adicionar reserva:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.status(201).send('Reserva adicionada com sucesso');
+    });
+});
+
+// Read - Obter todas as reservas
+app.get('/reservas', (req, res) => {
+    connection.query('SELECT * FROM reservas', (err, result) => {
+        if (err) {
+            console.error('Erro ao obter reservas:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.json(result);
+    });
+});
+
+// Update - Atualizar uma reserva existente
+app.put('/reservas/:id', (req, res) => {
+    const { livro_id, usuario_id, data_reserva } = req.body;
+    const id = req.params.id;
+
+    connection.query('UPDATE reservas SET livro_id = ?, usuario_id = ?, data_reserva = ? WHERE id = ?', [livro_id, usuario_id, data_reserva, id], (err, result) => {
+        if (err) {
+            console.error('Erro ao atualizar reserva:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.send('Reserva atualizada com sucesso');
+    });
+});
+
+// Delete - Remover uma reserva
+app.delete('/reservas/:id', (req, res) => {
+    const id = req.params.id;
+
+    connection.query('DELETE FROM reservas WHERE id = ?', [id], (err, result) => {
+        if (err) {
+            console.error('Erro ao remover reserva:', err);
+            res.status(500).send('Erro interno no servidor');
+            return;
+        }
+        res.send('Reserva removida com sucesso');
+    });
+});
 
 // Rota principal servindo o arquivo home.html
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/home.html');
 });
 
-// Rota para a página de cadastro de autores
+// Rota para as proximas páginas
 app.get('/cadastrar_autor', (req, res) => {
     res.sendFile(__dirname + '/cadastrar_autor.html');
 });
@@ -273,6 +390,12 @@ app.get('/editora', (req, res) => {
 }); 
 app.get('/categoria', (req, res) => {
     res.sendFile(__dirname + '/categorias.html');
+}); 
+app.get('/reservaa', (req, res) => {
+    res.sendFile(__dirname + '/reserva.html');
+}); 
+app.get('/detalhes', (req, res) => {
+    res.sendFile(__dirname + '/detalheLivros.html');
 }); 
 
 // Iniciar o servidor
