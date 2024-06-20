@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Empréstimo de Livro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #0056b3;
+            color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #004080;
+        }
+
+        .container {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+            max-width: 100%;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        select, input[type="date"] {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        button[type="submit"] {
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .alert {
+            color: red;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .emprestimos-container {
+            display: block;
+            margin-top: 20px;
+        }
+
+        .emprestimos-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .emprestimos-container li {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .emprestimos-container li button {
+            padding: 8px 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .emprestimos-container li button.edit {
+            background-color: #ffc107;
+        }
+
+        .emprestimos-container li button.edit:hover {
+            background-color: #ffca2c;
+        }
+
+        .emprestimos-container li button.remove {
+            margin-left: 10px;
+        }
+
+        .emprestimos-container li button.remove:hover {
+            background-color: #e74c3c;
+        }
+    </style>
+
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="http://localhost:3000">Home</a>
+        <a href="editora">Cadastrar Editora</a>
+        <a href="cadastrar_autor">Cadastrar Autor</a>
+        <a href="index">Cadastrar Livro</a>
+        <a href="categoria">Categorias</a>
+        <a href="detalhes">Detalhes Livros</a>
+        <a href="reservaa">Reservas</a>
+        <a href="emprestimo">Empréstimos</a>
+        <!-- Adicione outros links conforme necessário -->
+    </div>
+
+    <div class="container">
+        <h2>Empréstimo de Livro</h2>
+        <form id="loanForm">
+            <label for="bookId">Livro:</label>
+            <select id="bookId" name="bookId" required></select>
+
+            <label for="userId">Usuário:</label>
+            <select id="userId" name="userId" required></select>
+
+            <label for="loanDate">Data do Empréstimo:</label>
+            <input type="date" id="loanDate" name="loanDate" required>
+
+            <label for="returnDate">Data de Devolução:</label>
+            <input type="date" id="returnDate" name="returnDate" required>
+
+            <button type="submit">Registrar Empréstimo</button>
+        </form>
+
+        <div class="emprestimos-container">
+            <h2>Lista de Empréstimos</h2>
+            <input type="text" id="pesquisarEmprestimo" placeholder="Pesquisar empréstimo...">
+            <ul id="emprestimosList"></ul>
+        </div>
+    </div>
+
+   <script>
+    // Função para carregar a lista de empréstimos
+    function carregarEmprestimos(query = '') {
+        fetch(`http://localhost:3000/emprestimos?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                const emprestimosList = document.getElementById('emprestimosList');
+                emprestimosList.innerHTML = '';
+                data.forEach(emprestimo => {
+                    const li = document.createElement('li');
+                    li.dataset.id = emprestimo.id;
+                    li.innerHTML = `
+                        ID: ${emprestimo.id} - Livro ID: ${emprestimo.livro_id} - Usuário ID: ${emprestimo.usuario_id} - Data Empréstimo: ${emprestimo.data_emprestimo} - Data Devolução: ${emprestimo.data_devolucao}
+                        <button class="edit" onclick="editarEmprestimo(${emprestimo.id}, ${emprestimo.livro_id}, ${emprestimo.usuario_id}, '${emprestimo.data_emprestimo}', '${emprestimo.data_devolucao}')">Editar</button>
+                        <button class="remove" onclick="excluirEmprestimo(${emprestimo.id})">Excluir</button>
+                    `;
+                    emprestimosList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar empréstimos:', error);
+                // Exibir mensagem de erro para o usuário, se necessário
+            });
+    }
+
+    // Função para carregar os livros
+    function carregarLivros() {
+        fetch('http://localhost:3000/livros')
+            .then(response => response.json())
+            .then(data => {
+                const bookSelect = document.getElementById('bookId');
+                bookSelect.innerHTML = '<option value="">Selecione um livro</option>';
+                data.forEach(livro => {
+                    const option = document.createElement('option');
+                    option.value = livro.id;
+                    option.textContent = livro.titulo;
+                    bookSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar livros:', error.message);
+            });
+    }
+
+    // Função para carregar os usuários
+    function carregarUsuarios() {
+        fetch('http://localhost:3000/usuarios')
+            .then(response => response.json())
+            .then(data => {
+                const userSelect = document.getElementById('userId');
+                userSelect.innerHTML = '<option value="">Selecione um usuário</option>';
+                data.forEach(usuario => {
+                    const option = document.createElement('option');
+                    option.value = usuario.id;
+                    option.textContent = usuario.nome;
+                    userSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar usuários:', error.message);
+            });
+    }
+
+    // Função para cadastrar o empréstimo
+    function cadastrarEmprestimo(event) {
+        event.preventDefault();
+        const bookId = document.getElementById('bookId').value;
+        const userId = document.getElementById('userId').value;
+        const loanDate = document.getElementById('loanDate').value;
+        const returnDate = document.getElementById('returnDate').value;
+
+        if (new Date(loanDate) > new Date(returnDate)) {
+            alert('A data de devolução deve ser após a data de empréstimo.');
+            return;
+        }
+
+        fetch('http://localhost:3000/emprestimos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ bookId, userId, loanDate, returnDate })
+        })
+        .then(response => {
+            if (response.ok) {
+                carregarEmprestimos(); // Atualizar a lista de empréstimos
+                document.getElementById('loanForm').reset(); // Limpar o formulário
+            } else {
+                alert('Erro ao registrar empréstimo.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao registrar empréstimo:', error);
+        });
+    }
+
+    // Função para editar o empréstimo
+    function editarEmprestimo(id, livro_id, usuario_id, data_emprestimo, data_devolucao) {
+        const bookSelect = document.getElementById('bookId');
+        const userSelect = document.getElementById('userId');
+        const loanDateInput = document.getElementById('loanDate');
+        const returnDateInput = document.getElementById('returnDate');
+
+        bookSelect.value = livro_id;
+        userSelect.value = usuario_id;
+        loanDateInput.value = data_emprestimo;
+        returnDateInput.value = data_devolucao;
+
+        const loanForm = document.getElementById('loanForm');
+        loanForm.onsubmit = function(event) {
+            event.preventDefault();
+            const newBookId = bookSelect.value;
+            const newUserId = userSelect.value;
+            const newLoanDate = loanDateInput.value;
+            const newReturnDate = returnDateInput.value;
+
+            fetch(`http://localhost:3000/emprestimos/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ bookId: newBookId, userId: newUserId, loanDate: newLoanDate, returnDate: newReturnDate })
+            })
+            .then(response => {
+                if (response.ok) {
+                    carregarEmprestimos(); // Atualizar a lista de empréstimos
+                    loanForm.reset(); // Limpar o formulário
+                    loanForm.onsubmit = cadastrarEmprestimo; // Restaurar a função original do onsubmit
+                } else {
+                    alert('Erro ao atualizar empréstimo.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar empréstimo:', error);
+            });
+        };
+    }
+
+    // Função para excluir o empréstimo
+    function excluirEmprestimo(id) {
+        fetch(`http://localhost:3000/emprestimos/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                carregarEmprestimos(); // Atualizar a lista de empréstimos
+            } else {
+                alert('Erro ao excluir empréstimo.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao excluir empréstimo:', error);
+        });
+    }
+
+    // Função para buscar empréstimos
+    function buscarEmprestimos() {
+        const query = document.getElementById('pesquisarEmprestimo').value;
+        carregarEmprestimos(query);
+    }
+
+    // Event listeners
+    document.getElementById('loanForm').addEventListener('submit', cadastrarEmprestimo);
+    document.getElementById('pesquisarEmprestimo').addEventListener('input', buscarEmprestimos);
+
+    // Carregar dados iniciais
+    carregarLivros();
+    carregarUsuarios();
+    carregarEmprestimos();
+</script>
+</body>
+</html>

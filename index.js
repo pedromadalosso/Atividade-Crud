@@ -373,6 +373,92 @@ app.delete('/reservas/:id', (req, res) => {
     });
 });
 
+// Rota para obter todos os livros
+app.get('/livros', (req, res) => {
+    connection.query('SELECT id, titulo FROM livros', (error, results) => {
+        if (error) {
+            console.error('Erro ao buscar livros:', error);
+            res.status(500).send('Erro ao buscar livros');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+// Rota para obter todos os usuários
+app.get('/usuarios', (req, res) => {
+    connection.query('SELECT id, nome FROM usuarios', (error, results) => {
+        if (error) {
+            console.error('Erro ao buscar usuários:', error);
+            res.status(500).send('Erro ao buscar usuários');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+// Rota para obter todos os empréstimos
+app.get('/emprestimos', (req, res) => {
+    connection.query('SELECT * FROM emprestimos', (error, results) => {
+        if (error) {
+            console.error('Erro ao buscar empréstimos:', error);
+            res.status(500).send('Erro ao buscar empréstimos');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+// Rota para registrar um novo empréstimo
+app.post('/emprestimos', (req, res) => {
+    const { bookId, userId, loanDate, returnDate } = req.body;
+
+    if (!bookId || !userId || !loanDate || !returnDate) {
+        return res.status(400).send('Todos os campos são obrigatórios.');
+    }
+
+    const query = 'INSERT INTO emprestimos (livro_id, usuario_id, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)';
+    connection.query(query, [bookId, userId, loanDate, returnDate], (error, results) => {
+        if (error) {
+            console.error('Erro ao registrar empréstimo:', error);
+            return res.status(500).send('Erro ao registrar empréstimo.');
+        }
+        res.status(201).send('Empréstimo registrado com sucesso.');
+    });
+});
+
+// Rota para atualizar um empréstimo
+app.put('/emprestimos/:id', (req, res) => {
+    const { bookId, userId, loanDate, returnDate } = req.body;
+    const { id } = req.params;
+
+    if (!bookId || !userId || !loanDate || !returnDate) {
+        return res.status(400).send('Todos os campos são obrigatórios.');
+    }
+
+    const query = 'UPDATE emprestimos SET livro_id = ?, usuario_id = ?, data_emprestimo = ?, data_devolucao = ? WHERE id = ?';
+    connection.query(query, [bookId, userId, loanDate, returnDate, id], (error, results) => {
+        if (error) {
+            console.error('Erro ao atualizar empréstimo:', error);
+            return res.status(500).send('Erro ao atualizar empréstimo.');
+        }
+        res.status(200).send('Empréstimo atualizado com sucesso.');
+    });
+});
+
+// Rota para excluir um empréstimo
+app.delete('/emprestimos/:id', (req, res) => {
+    const { id } = req.params;
+
+    const query = 'DELETE FROM emprestimos WHERE id = ?';
+    connection.query(query, [id], (error, results) => {
+        if (error) {
+            console.error('Erro ao excluir empréstimo:', error);
+            return res.status(500).send('Erro ao excluir empréstimo.');
+        }
+        res.status(200).send('Empréstimo excluído com sucesso.');
+    });
+});
 // Rota principal servindo o arquivo home.html
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/home.html');
@@ -396,6 +482,9 @@ app.get('/reservaa', (req, res) => {
 }); 
 app.get('/detalhes', (req, res) => {
     res.sendFile(__dirname + '/detalheLivros.html');
+}); 
+app.get('/emprestimo', (req, res) => {
+    res.sendFile(__dirname + '/Emprestimo.html');
 }); 
 
 // Iniciar o servidor
